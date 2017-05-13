@@ -29,27 +29,23 @@ public class Main {
     }
     public static void main(String[] args)throws Exception
     {
-        //Crawler C = new Crawler();
-        //C.RunCrawler(50);
-        Indexer I=new Indexer(100);
-        //I.Get_New_Doucment();
-        //I.Create();
-        //I.Print();
-        //I.Save();
-        I.Load();
-        System.out.println(I.Word_to_Doucment);
-//        Cleaner C =new Cleaner();
-//        File folder = new File(Con.Root_Path+"\\doucments");
-//        File[] listOfFiles = folder.listFiles();
-//        for (int i = 0; i < 50; i++)
-//        {
-//        if (listOfFiles[i].isFile())
-//        {
-//            String[] Doucmet_elements = Get_Doucment_Text(listOfFiles[i].getName());
-//            //if(C.Clean_Text(Doucmet_elements[2]).length!=C.Clean_Text_V2(Doucmet_elements[2]).length)
-//            System.out.println(C.Clean_Text(Doucmet_elements[2]).length + " "+ C.Clean_Text_V2(Doucmet_elements[2]).length);
-//        }
-//        }
+        Cleaner C =new Cleaner();
+
+        File folder = new File(Con.Root_Path+"\\doucments");
+        File[] listOfFiles = folder.listFiles();
+        for (int i = 0; i < listOfFiles.length; i++)
+        {
+            if (listOfFiles[i].isFile())
+            {
+                String[] Doucmet_elements = Get_Doucment_Text(listOfFiles[i].getName());
+                String[] L1=C.Clean_Text(Doucmet_elements[2]);
+                String[] L2=C.Clean_Text_V2(Doucmet_elements[2]);
+                if(L1.length!=L2.length)
+                {
+                    System.out.println(listOfFiles[i].getName());
+                }
+            }
+        }
 
 
     }

@@ -16,6 +16,8 @@
 	<link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="assets/css/animate.css">
 	<link rel="stylesheet" href="assets/css/style.css">
+	<link rel="stylesheet" href="assets/css/jqpagination.css" />
+
 
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -30,7 +32,15 @@
 	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
 	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
 	<link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
-
+	<style>
+		#container {
+			display: block;
+			position:relative
+		}
+		.ui-autocomplete {
+			position: absolute;
+		}
+	</style>
 </head>
 
 <body>
@@ -45,7 +55,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="">AHM Search Engineate</a>
+			<a class="navbar-brand" href="index.jsp">AHM Search Engine</a>
 		</div>
 		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="collapse navbar-collapse" id="top-navbar-1">
@@ -54,7 +64,8 @@
 			</ul>
 			<form class="navbar-form navbar-right navbar-search-form disabled wow fadeInLeft" role="form" action="" method="get">
 				<div class="form-group">
-					<input type="text" name="q" placeholder="Search..." class="search form-control">
+					<input type="text" id="SearchQuery" name="q" placeholder="Search..." class="search form-control">
+					<div id="container"></div>
 				</div>
 			</form>
 			<ul class="nav navbar-nav navbar-right navbar-menu-items wow fadeIn">
@@ -80,7 +91,9 @@
 
 	</div>
 </div>
-
+<script>
+	var QRT=new Array();
+</script>
 <!-- Features -->
 <div class="features-container section-container">
 	<div class="container">
@@ -107,29 +120,15 @@
 			}
 		%>
 
-
-
-		<div class="row">
-			<%
-				for(int i=(p-1)*10;i<Math.min(r,(p-1)*10+10);i++)
-				{
-			%>
-			<div class="col-sm-6 features-box wow fadeInLeft">
-				<div class="row">
-					<div class="col-sm-3 features-box-icon">
-						<i><img src="<%=QR.get(i).Favicon%>"></i>
-					</div>
-					<div class="col-sm-9">
-						<h3><a href="<%=QR.get(i).URLs%>" class="image" target="_blank"><%=QR.get(i).TITLE%></a></h3>
-						<p>
-							<%=QR.get(i).Content%>
-						</p>
-					</div>
-				</div>
-			</div>
-			<%
-				}
-			%>
+		<%
+			for(int i=(p-1)*10;i<r;i++)
+			{
+		%>
+		<%="<script>QRT.push(['"+QR.get(i).Favicon+"','"+QR.get(i).URLs+"','"+QR.get(i).TITLE+"','"+QR.get(i).Content+"']);</script>"%>
+		<%
+			}
+		%>
+		<div class="row" id="results">
 
 		</div>
 
@@ -140,78 +139,21 @@
 
 
 
-<%String next="?";
-	if(r!=0)next+="q="+request.getParameter("q")+"&&p=";
-	else next+="p=";
+
+<%
+	if(r!=0)
+	{
 %>
-<div class="container">
-	<ul class="pagination">
-
-		<% if(p!=1){%>
-		<li><a  href=<%=next+"1"%>>First</a></li>
-		<% }else{%>
-		<li class="disabled"><a  href="#">First</a></li>
-		<% }%>
-
-
-		<% if(p!=1){%>
-		<li ><a href="<%=next+Integer.toString(p-1)%>"><%="<<"%></a></li>
-		<% }else{%>
-		<li class="disabled"><a  href="#"><%="<<"%></a></li>
-		<% }%>
-
-		<% if((p-1)*10<r){%>
-		<li ><a href="<%=next+Integer.toString(p)%>"><%=p%></a></li>
-		<% }else{%>
-		<li class="disabled"><a  href="#"><%=p%></a></li>
-		<% }%>
-
-
-		<% if((p)*10<r){%>
-		<li ><a href="<%=next+Integer.toString(p+1)%>"><%=p+1%></a></li>
-		<% }else{%>
-		<li class="disabled"><a  hre="#"><%=p+1%></a></li>
-		<% }%>
-
-		<% if((p+1)*10<r){%>
-		<li ><a href="<%=next+Integer.toString(p+2)%>"><%=p+2%></a></li>
-		<% }else{%>
-		<li class="disabled"><a  hre="#"><%=p+2%></a></li>
-		<% }%>
-
-
-		<% if((p+2)*10<r){%>
-		<li ><a href="<%=next+Integer.toString(p+3)%>"><%=p+3%></a></li>
-		<% }else{%>
-		<li class="disabled"><a  hre="#"><%=p+3%></a></li>
-		<% }%>
-
-		<% if((p+3)*10<r){%>
-		<li ><a href="<%=next+Integer.toString(p+4)%>"><%=p+4%></a></li>
-		<% }else{%>
-		<li class="disabled"><a  hre="#"><%=p+4%></a></li>
-		<% }%>
-
-		<% if((p)*10<r){%>
-		<li ><a href="<%=next+Integer.toString(p+1)%>"><%=">>"%></a></li>
-		<% }else{%>
-		<li class="disabled"><a  hre="#"><%=">>"%></a></li>
-		<% }%>
-
-
-		<% if(Math.ceil(r/10.00)!=p&&r!=0){%>
-		<li ><a href="<%=next+Integer.toString((int)Math.ceil(r/10.00))%>"><%="Last"%></a></li>
-		<% }else{%>
-		<li class="disabled"><a  hre="#"><%="Last"%></a></li>
-		<% }%>
-
-
-
-
-
-
-	</ul>
-</div>
+	<div class="gigantic pagination" id="pagination">
+		<a href="#" class="first" data-action="first">&laquo;</a>
+		<a href="#" class="previous" data-action="previous">&lsaquo;</a>
+		<input type="text" readonly="readonly" />
+		<a href="#" class="next" data-action="next">&rsaquo;</a>
+		<a href="#" class="last" data-action="last">&raquo;</a>
+	</div>
+<%
+	}
+%>
 <!-- Footer -->
 <footer>
 	<div class="container">
@@ -224,18 +166,84 @@
 </footer>
 
 
+
 <!-- Javascript -->
-<script src="assets/js/jquery-1.11.1.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/js/jquery.backstretch.min.js"></script>
 <script src="assets/js/wow.min.js"></script>
 <script src="assets/js/waypoints.min.js"></script>
 <script src="assets/js/scripts.js"></script>
+<script src="assets/js/jquery.jqpagination.js"></script>
 
 <!--[if lt IE 10]>
 <script src="assets/js/placeholder.js"></script>
 <![endif]-->
+<script>
+    $(function() {
+        $("#SearchQuery").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "GetData.jsp",
+                    type: "POST",
+                    dataType: "json",
+                    data: { name: request.term},
+                    success: function( data ) {
 
+                        response( $.map( data, function( item ) {
+                            return {
+                                label: item.name,
+                                value: item.value,
+                            }
+                        }));
+                    },
+                    error: function (error) {
+                        alert('error: ' + error);
+                    }
+                });
+            },
+            minLength: 2,
+            appendTo: "#container"
+        });
+    });
+</script>
+<script>
+    function Show(start)
+    {
+        for(var i=start;i<Math.min(start+10,QRT.length);i++)
+        {
+            var result='<div class="col-sm-6 features-box wow fadeInLeft"> <div class="row"><div class="col-sm-3 features-box-icon"> <i><img src="'+QRT[i][0]+'" width="42" height="42"></i> </div> <div class="col-sm-9"> <h3><a href="'+QRT[i][1]+'" class="image" target="_blank">'+QRT[i][2]+'</a></h3> <p>'+QRT[i][3]+'</p> </div> </div> </div>';
+            $('#results').append(result)
+        }
+    }
+    Show(0);
+</script>
+<script>
+    $(document).ready(function() {
+        // hide all but the first of our paragraphs
+        $('.some-container p:not(:first)').hide();
+
+        $('.pagination').jqPagination({
+            max_page    : Math.ceil(QRT.length/10),
+            paged       : function(page) {
+                var myNode = document.getElementById("results");
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.firstChild);
+                }
+                var start=(page-1)*10;
+                for(var i=start;i<Math.min(start+10,QRT.length);i++)
+                {
+                    var result='<div class="col-sm-6 features-box wow fadeInLeft"> <div class="row"><div class="col-sm-3 features-box-icon"> <i><img src="'+QRT[i][0]+'" width="42" height="42"></i> </div> <div class="col-sm-9"> <h3><a href="'+QRT[i][1]+'" class="image" target="_blank">'+QRT[i][2]+'</a></h3> <p>'+QRT[i][3]+'</p> </div> </div> </div>';
+                    $('#results').append(result)
+                }
+
+            }
+        });
+
+    });
+</script>
 </body>
 
 </html>
